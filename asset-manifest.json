@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/2024_drive-spot-navi/static/css/main.a20fffdd.css",
+    "main.js": "/2024_drive-spot-navi/static/js/main.ab4cb7e4.js",
+    "index.html": "/2024_drive-spot-navi/index.html",
+    "main.a20fffdd.css.map": "/2024_drive-spot-navi/static/css/main.a20fffdd.css.map",
+    "main.ab4cb7e4.js.map": "/2024_drive-spot-navi/static/js/main.ab4cb7e4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a20fffdd.css",
+    "static/js/main.ab4cb7e4.js"
+  ]
+}
