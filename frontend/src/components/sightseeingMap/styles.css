@@ -1,0 +1,46 @@
+.tooltip-background {
+    fill: white;
+    opacity: 1;
+    stroke: grey;
+    stroke-width: 1px;
+    rx: 15px;  /* 角丸の半径 */
+    ry: 15px;  /* 角丸の半径 */
+  }
+  
+  .tooltip-text {
+    font-size: 12px;
+    font-weight: bold;
+    fill: #333333;
+  }
+  @keyframes pulse {
+    0% {
+      stroke-width: initial;
+    }
+    50% {
+      stroke-width: 5px; /* 拡大するストロークの幅 */
+    }
+    100% {
+      stroke-width: initial;
+    }
+  }
+  
+  .pulse {
+    animation: pulse 1.5s infinite; /* 2秒間隔で無限にアニメーションを実行 */
+  }
+  @keyframes selected-pulse {
+    0% {
+      stroke-width: initial;
+    }
+    50% {
+      stroke-width: 1.5px; /* 拡大するストロークの幅 */
+    }
+    100% {
+      stroke-width: initial;
+    }
+  }
+  
+  .selected-pulse {
+    animation: selected-pulse 2s infinite; /* 2秒間隔で無限にアニメーションを実行 */
+  }
+
+  
