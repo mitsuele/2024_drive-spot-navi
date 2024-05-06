@@ -55,7 +55,7 @@ const Sidebar = forwardRef(({ sightseeingSpotList, onAttractionSelect, onTapClos
         </select>
         <button onClick={onTapCloseButton} className="w-6 h-6 ml-4">
           <img
-            src="/icons/closeIcon.png"
+            src="icons/closeIcon.png"
             alt="サイドバーを閉じる"
             className="w-full h-full"
           />

@@ -87,28 +87,28 @@ function SightseeingMap({ sightseeingSpots, onTapPin, selectedSightseeingSpot, a
         const currentAroundPinSize = calculateAroundPinSize(zoomScale);
         const currentAroundBorderThickness = calculateAroundBorderThickness(zoomScale);
 
-        // Update the transform of the paths and sightseeing spots
-        svg.selectAll('path').attr('transform', event.transform);
-        svg.selectAll('.sightseeing-spot')
+      // Update the transform of the paths and sightseeing spots
+      svg.selectAll('path').attr('transform', event.transform);
+      svg.selectAll('.sightseeing-spot')
+        .attr('transform', event.transform)
+        .attr('r', currentPinSize)
+        .attr('stroke-width', currentBorderThickness);
+
+      svg.selectAll('.departure-spot')
           .attr('transform', event.transform)
-          .attr('r', currentPinSize)
-          .attr('stroke-width', currentBorderThickness);
+        .attr('r', currentPinSize)
+        .attr('stroke-width', currentBorderThickness);
 
-        svg.selectAll('.departure-spot')
-           .attr('transform', event.transform)
-          .attr('r', currentPinSize)
-          .attr('stroke-width', currentBorderThickness);
+      svg.selectAll('.around-sightseeing-spot')
+        .attr('transform', event.transform)
 
-        svg.selectAll('.around-sightseeing-spot')
-          .attr('transform', event.transform)
-
-          .attr('r', currentAroundPinSize)
-          .attr('stroke-width', currentBorderThickness);
-        svg.selectAll(".tooltip")
-          .attr("transform", event.transform);
-        hideTooltip();
-        hideSightseeingSpotTooltip();
-      });
+        .attr('r', currentAroundPinSize)
+        .attr('stroke-width', currentBorderThickness);
+      svg.selectAll(".tooltip")
+        .attr("transform", event.transform);
+      hideTooltip();
+      hideSightseeingSpotTooltip();
+    });
 
     svg.call(zoom);
     zoomRef.current = zoom;
@@ -206,117 +206,117 @@ function SightseeingMap({ sightseeingSpots, onTapPin, selectedSightseeingSpot, a
          .attr('fill', regionColor)
          .attr('stroke', borderColor);
 
-        svg.selectAll(".sightseeing-spot")
-          .data(sightseeingSpots)
-          .enter()
-          .append("circle")
-          .attr("class", (d) => "sightseeing-spot" + (topTenPercentSpots.has(d.id) ? " pulse" : ""))
-          .attr("cx", (d) => projection([d.longitude, d.latitude])[0])
-          .attr("cy", (d) => projection([d.longitude, d.latitude])[1])
-          .attr("r", initialPinSize)
-          .attr("stroke-width", initialBorderThickness)
-          .attr("fill", (d) => topTenPercentSpots.has(d.id) ? "gold" : "#00bfff")
-          .attr("stroke", "white")
-          .on("click", (event, d) => {
-            zoomAndSlideRight([d.longitude, d.latitude]);
-            onTapPin(d);
-          })
-          .each(function(d) {
-            if (topTenPercentSpots.has(d.id)) {
-              d3.select(this).raise(); // 上位10%のスポットを最上層に表示
-            }
-          })
-          svg.selectAll(".sightseeing-spot")
-            .on("mouseenter", (event, d) => {
-              showSightseeingSpotTooltip(d, event);
-              hideTooltip();
-            })
-            .on("mouseleave", () => {
-            });
-            const legend = svg.append("g")
-            .attr("class", "legend")
-            .attr("transform", `translate(${mapWidth - 260}, ${mapHeight - 195})`); // 位置を調整
+      svg.selectAll(".sightseeing-spot")
+         .data(sightseeingSpots)
+         .enter()
+         .append("circle")
+         .attr("class", (d) => "sightseeing-spot" + (topTenPercentSpots.has(d.id) ? " pulse" : ""))
+         .attr("cx", (d) => projection([d.longitude, d.latitude])[0])
+         .attr("cy", (d) => projection([d.longitude, d.latitude])[1])
+         .attr("r", initialPinSize)
+         .attr("stroke-width", initialBorderThickness)
+         .attr("fill", (d) => topTenPercentSpots.has(d.id) ? "gold" : "#00bfff")
+         .attr("stroke", "white")
+         .on("click", (event, d) => {
+           zoomAndSlideRight([d.longitude, d.latitude]);
+           onTapPin(d);
+         })
+         .each(function(d) {
+           if (topTenPercentSpots.has(d.id)) {
+             d3.select(this).raise(); // 上位10%のスポットを最上層に表示
+           }
+         });
+      
+      svg.selectAll(".sightseeing-spot")
+        .on("mouseenter", (event, d) => {
+          showSightseeingSpotTooltip(d, event);
+          hideTooltip();
+        })
+        .on("mouseleave", () => {});
+      
+      const legendX = Math.min(mapWidth, window.innerWidth) - 260;
+      const legendY = Math.min(mapHeight, window.innerHeight) - 195;
+      const legend = svg.append("g")
+                        .attr("class", "legend")
+                        .attr("transform", `translate(${legendX}, ${legendY})`); // 位置を調整
 
-legend.append("rect")
-.attr("x", 0)
-.attr("y", 0)
-.attr("width", 240) // 背景の幅
-.attr("height", 160) // 背景の高さ
-.attr("fill", "gray") // 背景色
-.attr("stroke", "black") // ボーダー色
-.attr("stroke-width", 1) // ボーダーの太さ
-.attr("rx", 10) // 角丸の半径（X軸方向）
-.attr("ry", 10); // 角丸の半径（Y軸方向）
+      legend.append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", 240) // 背景の幅
+      .attr("height", 160) // 背景の高さ
+      .attr("fill", "gray") // 背景色
+      .attr("stroke", "black") // ボーダー色
+      .attr("stroke-width", 1) // ボーダーの太さ
+      .attr("rx", 10) // 角丸の半径（X軸方向）
+      .attr("ry", 10); // 角丸の半径（Y軸方向）
 
-// 出発地の凡例
-legend.append("circle")
-.attr("cx", 30)
-.attr("cy", 20)
-.attr("r", initialPinSize)
-.attr("fill", "red")
-.attr("stroke", "white")
-.attr("stroke-opacity", 0.4)
-.classed("pulse", true);
-legend.append("text")
-.attr("x", 50)
-.attr("y", 25)
-.text("出発地")
-.attr("class", "legend-text");
+      // 出発地の凡例
+      legend.append("circle")
+      .attr("cx", 30)
+      .attr("cy", 20)
+      .attr("r", initialPinSize)
+      .attr("fill", "red")
+      .attr("stroke", "white")
+      .attr("stroke-opacity", 0.4)
+      .classed("pulse", true);
+      legend.append("text")
+      .attr("x", 50)
+      .attr("y", 25)
+      .text("出発地")
+      .attr("class", "legend-text");
 
-// 上位10%の観光地の凡例
-legend.append("circle")
-.attr("cx", 30)
-.attr("cy", 50)
-.attr("r", initialPinSize)
-.attr("fill", "gold")
-.attr("stroke", "white")
-.classed("pulse", true);
-legend.append("text")
-.attr("x", 50)
-.attr("y", 55)
-.text("上位10%の観光地")
-.attr("class", "legend-text");
+      // 上位10%の観光地の凡例
+      legend.append("circle")
+      .attr("cx", 30)
+      .attr("cy", 50)
+      .attr("r", initialPinSize)
+      .attr("fill", "gold")
+      .attr("stroke", "white")
+      .classed("pulse", true);
+      legend.append("text")
+      .attr("x", 50)
+      .attr("y", 55)
+      .text("上位10%の観光地")
+      .attr("class", "legend-text");
 
-// その他の観光地の凡例
-legend.append("circle")
-.attr("cx",30)
-.attr("cy", 80)
-.attr("r", initialPinSize)
-.attr("fill", "#00bfff");
-legend.append("text")
-.attr("x", 50)
-.attr("y", 85)
-.text("その他の観光地")
-.attr("class", "legend-text");
+      // その他の観光地の凡例
+      legend.append("circle")
+      .attr("cx",30)
+      .attr("cy", 80)
+      .attr("r", initialPinSize)
+      .attr("fill", "#00bfff");
+      legend.append("text")
+      .attr("x", 50)
+      .attr("y", 85)
+      .text("その他の観光地")
+      .attr("class", "legend-text");
 
-// 周辺グルメスポットの凡例
-legend.append("circle")
-.attr("cx", 30)
-.attr("cy", 110)
-.attr("r", initialPinSize)
-.attr("fill", "#F08080");
-legend.append("text")
-.attr("x", 50)
-.attr("y", 115)
-.text("周辺グルメスポット")
-.attr("class", "legend-text");
+      // 周辺グルメスポットの凡例
+      legend.append("circle")
+      .attr("cx", 30)
+      .attr("cy", 110)
+      .attr("r", initialPinSize)
+      .attr("fill", "#F08080");
+      legend.append("text")
+      .attr("x", 50)
+      .attr("y", 115)
+      .text("周辺グルメスポット")
+      .attr("class", "legend-text");
 
-// 周辺観光スポットの凡例
-legend.append("circle")
-.attr("cx",30)
-.attr("cy", 140)
-.attr("r", initialPinSize)
-.attr("fill", "#90EE90");
-legend.append("text")
-.attr("x", 50)
-.attr("y", 145)
-.text("周辺観光スポット")
-.attr("class", "legend-text");
-
-            
+      // 周辺観光スポットの凡例
+      legend.append("circle")
+      .attr("cx",30)
+      .attr("cy", 140)
+      .attr("r", initialPinSize)
+      .attr("fill", "#90EE90");
+      legend.append("text")
+      .attr("x", 50)
+      .attr("y", 145)
+      .text("周辺観光スポット")
+      .attr("class", "legend-text");
 
       if (departureSpot) {
-
         svg
           .selectAll(".departure-spot")
           .data([departureSpot])
@@ -334,20 +334,13 @@ legend.append("text")
           .attr("stroke", "white") // You can change the stroke color as needed
           .attr("stroke-opacity", 0.4) // You can change the stroke color as needed
           .classed("pulse", true); // アニメーションクラスを適用
-
       }
-
-
-
-
     });
 
     if (selectedSightseeingSpot) {
       zoomAndSlideRight([selectedSightseeingSpot.longitude, selectedSightseeingSpot.latitude]);
     }
   }, [sightseeingSpots]);
-
-
 
   useEffect(() => {
     if (

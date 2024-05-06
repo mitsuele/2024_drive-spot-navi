@@ -65,10 +65,7 @@ function App() {
   const onTapSearchButton = (departure, durationMin, durationMax, fee) => {
     const fetchData = async () => {
       try {
-        const json = await getSightSeeingSpotsByConditions(durationMax, durationMin, fee);
-        // for (let i = 0; i < 5; i++) {
-        //   console.log(json[i]);
-        // }
+        const json = await getSightSeeingSpotsByConditions(durationMin, durationMax, fee);
 
         const spot = departureSpotList.find((spot) => spot.name === departure);
         setSelectedDepartureSpot(spot);
@@ -164,7 +161,7 @@ function App() {
           <div className="sidebar-buttonbg-gray-800 overflow-y-auto text-white z-10 pt-20 flex-col justify-start">
             <button className="w-full h-full" onClick={onTapOpenSideBarButton}>
               <img
-                src="/icons/open.png"
+                src="icons/open.png"
                 alt="サイドバーを開く"
                 className="w-8 h-8"
               />

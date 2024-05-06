@@ -29,7 +29,7 @@ const AttractionDetail = forwardRef(({ attraction, onTapCloseButton, isMounted, 
             className="w-6 h-6 flex items-center justify-center mt-4"
           >
             <img
-              src="/icons/closeIcon.png"
+              src="icons/closeIcon.png"
               alt="閉じる"
               className="w-full h-full"
             />
