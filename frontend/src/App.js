@@ -65,12 +65,15 @@ function App() {
   const onTapSearchButton = (departure, durationMin, durationMax, fee) => {
     const fetchData = async () => {
       try {
-        const response = await getSightSeeingSpotsByConditions(durationMax, durationMin, fee);
+        const json = await getSightSeeingSpotsByConditions(durationMax, durationMin, fee);
+        // for (let i = 0; i < 5; i++) {
+        //   console.log(json[i]);
+        // }
 
         const spot = departureSpotList.find((spot) => spot.name === departure);
         setSelectedDepartureSpot(spot);
 
-        const json = await response.json();
+        // const json = await response.json();
 
         setSightseeingSpotList(json);
         setSelectedSightseeingSpot(null);
@@ -109,9 +112,9 @@ function App() {
     setTimeout(() => setSelectedSightseeingSpot(sightseeingSpot), 500);
     const fetchData = async () => {
       try {
-        const response = await getAroundSpotById(sightseeingSpot.id);
+        const json = await getAroundSpotById(sightseeingSpot.id);
 
-        const json = await response.json();
+        // const json = await response.json();
         setAroundSightseeingSpotList(json);
         setFilteredSightseeingSpotList(json);
       } catch (error) {
@@ -125,9 +128,12 @@ function App() {
     setIsDetailMounted(false);
     const fetchData = async () => {
       try {
-        const response = await getAroundSpotById(sightseeingSpot.id);
+        const json = await getAroundSpotById(sightseeingSpot.id);
+        for (let i = 0; i < 5; i++) {
+          console.log(json[i]);
+        }
 
-        const json = await response.json();
+        // const json = await response.json();
         setAroundSightseeingSpotList(json);
         setFilteredSightseeingSpotList(json);
       } catch (error) {

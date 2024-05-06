@@ -5,39 +5,23 @@ import React, { useEffect, useState, useRef } from 'react';
 // const app = express();
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
-import Papa from 'papaparse';
-const { json } = require('d3');
-
-// 以下APIの設定
-const data_path = 'http://localhost:3000/2024_drive-spot-navi/frontend/data_temp/';
+// import Papa from 'papaparse';
+// import { parse } from 'path';
+const d3 = require('d3');
 
 // 距離と値段を指定して取得するAPI
-const readCsv = async (filePath) => {
-  try {
-    const response = await fetch(filePath);
-    if (!response.ok) {
-      throw new Error('Failed to fetch CSV file');
-    }
-    const text = await response.text();
-    const { data } = Papa.parse(text, { header: true });
-    return data;
-  } catch (error) {
-    throw new Error('Error reading CSV file: ' + error.message);
-  }
-};
-// const readCsv = (filePath) => {
-//   fetch(filePath)
-//   .then((res) => {
-//     if(!res.ok) {
-//       throw new Error('Network response was not ok');
+// const parseCSV = async (dataFile) => {
+//   try {
+//     const text = await dataFile.text();
+//     const { data } = Papa.parse(text, { header: true });
+//     for (let i = 0; i < 5; i++) {
+//       const row = data[i];
+//       console.log(row);
 //     }
-//     return res.text();
-//   })
-//   .then((csv_data) => {
-//     return csv_data.split('\n');
-
-//   })
-//   // return fileAsText.split('\n').map((row) => row.split(','));
+//     return data;
+//   } catch (error) {
+//     throw new Error('Error reading CSV file: ' + error.message);
+//   }
 // };
 // const readCsv = (filePath) => {
 //   return new Promise((resolve, reject) => {
@@ -49,6 +33,8 @@ const readCsv = async (filePath) => {
 //       .on("error", (error) => reject(error));
 //   });
 // };
+
+const data_path = 'data_temp/';
 
 export async function getSightSeeingSpotsByConditions(durationMin, durationMax, fee) {
   durationMin = durationMin || 0;
@@ -62,7 +48,10 @@ export async function getSightSeeingSpotsByConditions(durationMin, durationMax, 
   const rentCarFeePerKm = 16;
 
   try {
-    const routeResults = await readCsv(data_path + "driving_data/route.csv");
+    const routeFilePath = data_path + "driving_data/departure_spot.csv";
+    console.log(routeFilePath);
+    const routeResults = await d3.csv(routeFilePath);
+    console.log(routeResults);
 
     // 距離と時間のデータを格納するオブジェクトを作成
     const spotDistanceTimeMap = routeResults.reduce((acc, data) => {
@@ -78,7 +67,7 @@ export async function getSightSeeingSpotsByConditions(durationMin, durationMax, 
 
     // 絞り込み条件に合うルートをフィルタリング
     const filteredRouteResults = routeResults.filter((data) => {
-      console.log(data);
+      // console.log(data);
       const isTimeValid = (durationMin <= parseInt(data.time, 10)) && (parseInt(data.time, 10) <= durationMax);
       const isPriceValid = parseInt(data.fee, 10) <= price;
       const isDepartureSpotValid = departureSpotId ? data.departure_spot_id === departureSpotId : true;
@@ -87,7 +76,8 @@ export async function getSightSeeingSpotsByConditions(durationMin, durationMax, 
 
     const spotIds = new Set(filteredRouteResults.map((data) => data.sight_seeing_spot_id));
 
-    const sightSeeingSpots = await readCsv(data_path + "sight_seeing_spot.csv");
+    const sightSeeingSpotsFilePath = data_path + "sightseeing_data/sight_seeing_spot.csv";
+    const sightSeeingSpots = await d3.csv(sightSeeingSpotsFilePath);
 
     // 観光スポット情報に距離と時間のデータを組み込む
     const enhancedSightSeeingSpots = sightSeeingSpots
@@ -103,7 +93,7 @@ export async function getSightSeeingSpotsByConditions(durationMin, durationMax, 
         };
       });
     
-    return json(enhancedSightSeeingSpots);
+    return d3.json(enhancedSightSeeingSpots);
   } catch (err) {
     console.log(err);
   }
@@ -176,14 +166,17 @@ export async function getSightSeeingSpotsByConditions(durationMin, durationMax, 
 
 // 指定されたIDの近くの場所のIDリストを取得する関数
 async function getNearbyPlaceIds(aroundSpotFilePath, id) {
-  const sightSeeingSpots = await readCsv(aroundSpotFilePath);
+  const sightSeeingSpots = await d3.csv(aroundSpotFilePath);
   const spot = sightSeeingSpots.find(s => s.id === id);
   return spot ? spot.nearby_places.split('-') : [];
 }
 
 // 指定されたIDリストに基づいてsightseeing_spot.csvから情報を取得する関数
 async function getSightSeeingSpotsByIds(sightSeeingFilePath, ids) {
-  const sightSeeingSpots = await readCsv(sightSeeingFilePath);
+  const sightSeeingSpots = await d3.csv(sightSeeingFilePath);
+  for (let i = 0; i < 5; i++) {
+    console.log(sightSeeingSpots[i]);
+  }
   return sightSeeingSpots.filter(spot => ids.includes(spot.id) && parseInt(spot.user_ratings_total, 10) >= 100);
 }
 
@@ -196,7 +189,7 @@ export async function getAroundSpotById(id) {
     const nearbyPlaceIds = await getNearbyPlaceIds(aroundSpotFilePath, id);
     const filteredSightSeeingSpots = await getSightSeeingSpotsByIds(sightSeeingFilePath, nearbyPlaceIds);
 
-    return json(filteredSightSeeingSpots);
+    return d3.json(filteredSightSeeingSpots);
   } catch (err) {
     console.log(err);
   }
