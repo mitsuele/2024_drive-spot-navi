@@ -34,7 +34,7 @@ const d3 = require('d3');
 //   });
 // };
 
-const data_path = 'data_temp/';
+const data_path = 'data/';
 
 export async function getSightSeeingSpotsByConditions(durationMin, durationMax, fee) {
   durationMin = durationMin || 0;
@@ -51,7 +51,9 @@ export async function getSightSeeingSpotsByConditions(durationMin, durationMax, 
     const routeFilePath = data_path + "driving_data/departure_spot.csv";
     console.log(routeFilePath);
     const routeResults = await d3.csv(routeFilePath);
-    console.log(routeResults);
+    for (let i = 0; i < 5; i++) {
+      console.log(routeResults[i]);
+    }
 
     // 距離と時間のデータを格納するオブジェクトを作成
     const spotDistanceTimeMap = routeResults.reduce((acc, data) => {
