@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/2024_drive-spot-navi/static/css/main.a20fffdd.css",
-    "main.js": "/2024_drive-spot-navi/static/js/main.3fcca174.js",
+    "main.js": "/2024_drive-spot-navi/static/js/main.8bd183e8.js",
     "index.html": "/2024_drive-spot-navi/index.html",
     "main.a20fffdd.css.map": "/2024_drive-spot-navi/static/css/main.a20fffdd.css.map",
-    "main.3fcca174.js.map": "/2024_drive-spot-navi/static/js/main.3fcca174.js.map"
+    "main.8bd183e8.js.map": "/2024_drive-spot-navi/static/js/main.8bd183e8.js.map"
   },
   "entrypoints": [
     "static/css/main.a20fffdd.css",
-    "static/js/main.3fcca174.js"
+    "static/js/main.8bd183e8.js"
   ]
 }
