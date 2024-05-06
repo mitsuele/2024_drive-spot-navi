@@ -24,10 +24,8 @@ cd frontend
 make install
 make
 
-# バックエンド（別ターミナルを立ち上げ）
-cd backend
-make install
-make
+# Reactプロジェクトをデプロイできる形に
+npm run deploy
 
 localhost:3000にアクセス
 
