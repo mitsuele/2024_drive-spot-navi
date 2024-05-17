@@ -38,7 +38,7 @@ const AttractionDetail = forwardRef(({ attraction, onTapCloseButton, isMounted, 
         {/* 観光地の詳細情報 */}
         {attraction.image_path && (
           <img
-            src={attraction.image_path}
+            src={attraction.image_path + `key=${process.env.GOOGLE_MAPS_API_KEY}`}
             alt={attraction.name}
             className="h-36 w-full my-2 object-cover"
           />

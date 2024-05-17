@@ -9,7 +9,7 @@ function SightseeingMap({ sightseeingSpots, onTapPin, selectedSightseeingSpot, a
   const svgRef = useRef(); // SVG要素を保持するためのref
   const projectionRef = useRef(); // projection関数を保持するためのref
   const zoomRef = useRef(); // zoom関数を保持するためのref
-  const mapWidth = 1440;
+  const mapWidth = 1600;
   const mapHeight = 800;
   const zoomLevel = 1;
   const tappedZoomLevel = 5; 
